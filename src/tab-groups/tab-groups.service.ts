@@ -12,6 +12,14 @@ export class TabGroupsService {
     return tabGroups;
   }
 
+  async createTabGroup(userId: number, name: string): Promise<TabGroup> {
+    const tabGroup = await this.tabGroupsRepository.createTabGroup(
+      userId,
+      name,
+    );
+    return tabGroup;
+  }
+
   hello(): string {
     return 'hola mundo!';
   }

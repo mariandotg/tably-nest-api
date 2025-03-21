@@ -4,6 +4,7 @@ import {
   varchar,
   timestamp,
   integer,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
@@ -20,7 +21,7 @@ export const pages = pgTable('pages', {
 });
 
 export const tabGroups = pgTable('tab_groups', {
-  id: serial('id').primaryKey(),
+  id: uuid().primaryKey().defaultRandom(), // Cambia serial a uuid
   name: varchar('name', { length: 255 }).notNull(),
   userId: integer('user_id')
     .references(() => users.id)
@@ -31,7 +32,7 @@ export const tabGroups = pgTable('tab_groups', {
 
 export const tabGroupPages = pgTable('tab_group_pages', {
   id: serial('id').primaryKey(),
-  tabGroupId: integer('tab_group_id')
+  tabGroupId: uuid('tab_group_id')
     .references(() => tabGroups.id)
     .notNull(),
   pageId: integer('page_id')

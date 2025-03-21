@@ -1,7 +1,7 @@
 export class TabGroup {
-  id: number;
+  id: string;
   name: string;
-  userId: number;
+  //userId: number;
   pages: Page[];
 }
 

@@ -23,8 +23,11 @@ export class TabGroupsRepository implements ITabGroupRepository {
     // Group results by tab group and organize pages
     const tabGroupMap = results.reduce((acc, row) => {
       if (!acc.has(row.tabGroup.id)) {
+        // removed userId from the object
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { userId, ...restTabGroup } = row.tabGroup;
         acc.set(row.tabGroup.id, {
-          ...row.tabGroup,
+          ...restTabGroup,
           pages: [],
         });
       }
@@ -34,8 +37,18 @@ export class TabGroupsRepository implements ITabGroupRepository {
       }
 
       return acc;
-    }, new Map<number, TabGroup>());
+    }, new Map<string, TabGroup>());
 
     return Array.from(tabGroupMap.values());
+  }
+
+  async createTabGroup(userId: number, name: string): Promise<TabGroup> {
+    const [tabGroup] = await this.db
+      .insert(tabGroups)
+      .values({ userId, name })
+      .returning();
+
+    const newTabGroup = { ...tabGroup, pages: [] };
+    return newTabGroup;
   }
 }
